@@ -3,6 +3,20 @@
 
 {% from "cis-benchmark/map.jinja" import cis_benchmark with context %}
 
+
+{% for filesystem in cis_benchmark.disable_filesystem_types %}
+no-{{ filesystem }}:
+  file.managed:
+    - name: /etc/modprobe.d/no-{{ filesystem }}.conf
+    - user: root
+    - group: root
+    - mode: 640
+  file.line:
+    - name: /etc/modprobe.d/no-{{ filesystem }}.conf
+    - content: "install {{ filesystem }} /bin/true 
+    - mode: ensure
+{% endfor %}
+
 # Services disabled (from all benchmark sections)
 {% for service in cis_benchmark.disable_services %}
 {{ service }}:
@@ -45,8 +59,9 @@
 
 # 1.2.3
 {% if cis_benchmark.update %}
-/usr/bin/yum update:
+yum-update:
   cmd.run:
+    - name: /usr/bin/yum -y update
     - unless:
       - /usr/bin/yum check-update
 {% endif %}
@@ -120,6 +135,7 @@ rsyslog_service:
     - user: root
     - group: root
     - mode: 600
+    - replace: False
     
 # 6.1.5
 /etc/cron.hourly:
