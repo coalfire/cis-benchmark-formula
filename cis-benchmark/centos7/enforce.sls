@@ -3,18 +3,18 @@
 
 {% from "cis-benchmark/map.jinja" import cis_benchmark with context %}
 
-
+# Filesystem mounts disabled
 {% for filesystem in cis_benchmark.disable_filesystem_types %}
 no-{{ filesystem }}:
-  file.managed:
-    - name: /etc/modprobe.d/no-{{ filesystem }}.conf
+  file.line:
+    - name: /etc/modprobe.d/disable_{{ filesystem }}.conf
+    - content: "install {{ filesystem }} /bin/true\n"
+    - mode: insert
+    - location: start
+    - create: True
     - user: root
     - group: root
-    - mode: 640
-  file.line:
-    - name: /etc/modprobe.d/no-{{ filesystem }}.conf
-    - content: "install {{ filesystem }} /bin/true 
-    - mode: ensure
+    - file_mode: 640
 {% endfor %}
 
 # Services disabled (from all benchmark sections)
