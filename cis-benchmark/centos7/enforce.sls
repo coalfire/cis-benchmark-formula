@@ -45,8 +45,9 @@
 
 # 1.2.3
 {% if cis_benchmark.update %}
-/usr/bin/yum update:
+yum_update:
   cmd.run:
+    - name: '/usr/bin/yum -y update'
     - unless:
       - /usr/bin/yum check-update
 {% endif %}
