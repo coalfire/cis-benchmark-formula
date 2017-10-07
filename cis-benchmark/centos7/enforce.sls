@@ -3,20 +3,6 @@
 
 {% from "cis-benchmark/map.jinja" import cis_benchmark with context %}
 
-# Filesystem mounts disabled
-{% for filesystem in cis_benchmark.disable_filesystem_types %}
-no-{{ filesystem }}:
-  file.line:
-    - name: /etc/modprobe.d/disable_{{ filesystem }}.conf
-    - content: "install {{ filesystem }} /bin/true\n"
-    - mode: insert
-    - location: start
-    - create: True
-    - user: root
-    - group: root
-    - file_mode: 640
-{% endfor %}
-
 # Services disabled (from all benchmark sections)
 {% for service in cis_benchmark.disable_services %}
 {{ service }}:
@@ -45,8 +31,22 @@ no-{{ filesystem }}:
     - value: 0
 {% endfor %}
 
-# Not Included: 1.1 Filesystem Configuration
+# 1.1.1
+# Filesystem mounts disabled
+{% for filesystem in cis_benchmark.disable_filesystem_types %}
+no-{{ filesystem }}:
+  file.line:
+    - name: /etc/modprobe.d/disable_{{ filesystem }}.conf
+    - content: "install {{ filesystem }} /bin/true\n"
+    - mode: insert
+    - location: start
+    - create: True
+    - user: root
+    - group: root
+    - file_mode: 640
+{% endfor %}
 
+#
 
 # 1.2.2
 {% if cis_benchmark.gpgcheck %}
@@ -70,14 +70,14 @@ yum-update:
 {% if cis_benchmark.aide %}
 aide:
   pkg.installed
-  
+
 init_aide:
   cmd.run:
     - name: "/usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'"
     - creates: /var/lib/aide/aide.db.gz
     - require:
       - pkg: aide
-      
+
 # 1.3.2
 /usr/sbin/aide --check:
   cron.present:
@@ -90,7 +90,7 @@ init_aide:
 enforcing:
   selinux.mode
 {% endif %}
-  
+
 
 # 1.5.1 - 1.5.2
 /boot/grub2/grub.cfg:
@@ -98,18 +98,18 @@ enforcing:
     - user: root
     - group: root
     - mode: 600
-    
+
 
 # 1.6.2
 kernel.randomize_va_space:
   sysctl.present:
     - value: 2
-    
+
 # 4.5.1
 {% if cis_benchmark.tcpwrappers %}
 tcp_wrappers:
   pkg.installed
-  
+
 # Incomplete: need to generate hosts.allow
 {% endif %}
 
@@ -118,14 +118,14 @@ tcp_wrappers:
 rsyslog_pkg:
   pkg.installed:
     - name: rsyslog
-  
+
 rsyslog_service:
   service.running:
     - name: rsyslog
     - enable: True
     - require:
       - pkg: rsyslog
-      
+
 # Omitted: 5.1.3, 5.1.4, 5.1.5
 {% endif %}
 
@@ -136,14 +136,14 @@ rsyslog_service:
     - group: root
     - mode: 600
     - replace: False
-    
+
 # 6.1.5
 /etc/cron.hourly:
   file.directory:
     - user: root
     - group: root
     - mode: 700
- 
+
 # 6.1.6
 /etc/cron.daily:
   file.directory:
@@ -157,7 +157,7 @@ rsyslog_service:
     - user: root
     - group: root
     - mode: 700
-    
+
 # 6.1.8
 /etc/cron.monthly:
   file.directory:
@@ -171,7 +171,7 @@ rsyslog_service:
     - user: root
     - group: root
     - mode: 700
-    
+
 # 6.1.10
 /etc/at.deny:
   file.absent
@@ -181,7 +181,7 @@ rsyslog_service:
     - user: root
     - group: root
     - mode: 600
-    
+
 # Omitted: 6.1.11
 
 
