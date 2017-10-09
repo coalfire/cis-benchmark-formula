@@ -165,6 +165,22 @@ rsyslog_service:
     - group: root
     - mode: 700
 
+# 6.1.6
+/etc/passwd-:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - replace: False
+
+# 6.1.8
+/etc/group-:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - replace: False
+
 # 6.1.9
 /etc/cron.d:
   file.directory:
