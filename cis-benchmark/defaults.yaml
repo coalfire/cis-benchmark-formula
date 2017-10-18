@@ -44,6 +44,9 @@ cis_benchmark:
   # 5.1 Use rsyslog instead of syslogd
   rsyslog: True
 
+  # 5.6 Ensure access to the su command is restricted
+  pam_su: True
+
   daemon_umask: '027'  # 3.1
 
   remove_pkgs:

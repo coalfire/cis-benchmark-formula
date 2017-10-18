@@ -137,6 +137,14 @@ rsyslog_service:
     - mode: 600
     - replace: False
 
+# 5.6
+{% if cis_benchmark.pam_su %}
+/etc/pam.d/su:
+  file.line:
+    - content: auth required pam_wheel.so use_uid
+    - mode: ensure
+{% endif %}
+
 # 6.1.4
 /etc/crontab:
   file.managed:
