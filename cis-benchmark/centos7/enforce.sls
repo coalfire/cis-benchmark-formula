@@ -129,6 +129,14 @@ rsyslog_service:
 # Omitted: 5.1.3, 5.1.4, 5.1.5
 {% endif %}
 
+# 5.2.1
+/etc/ssh/sshd_config:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - replace: False
+
 # 6.1.4
 /etc/crontab:
   file.managed:
