@@ -235,6 +235,7 @@ useradd_inactive_lock:
     - user: root
     - group: root
     - mode: 600
+    - replace: False
 
 # Omitted: 6.1.11
 
