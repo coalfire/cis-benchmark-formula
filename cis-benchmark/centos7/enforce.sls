@@ -16,7 +16,6 @@
   pkg.removed
 {% endfor %}
 
-
 # Sysctl variables enabled (value = 1)
 {% for sysctlv in cis_benchmark.sysctl_enable %}
 {{ sysctlv }}:
@@ -31,7 +30,6 @@
     - value: 0
 {% endfor %}
 
-# FIXME not idempotent
 # 1.1.1
 # Filesystem mounts disabled
 {% for filesystem in cis_benchmark.disable_filesystem_types %}
@@ -44,8 +42,6 @@ no-{{ filesystem }}:
     - group: root
     - file_mode: 640
 {% endfor %}
-
-#
 
 # 1.2.2
 {% if cis_benchmark.gpgcheck %}
@@ -90,14 +86,13 @@ enforcing:
   selinux.mode
 {% endif %}
 
-
 # 1.5.1 - 1.5.2
 /boot/grub2/grub.cfg:
   file.managed:
     - user: root
     - group: root
     - mode: 600
-
+    - replace: False
 
 # 1.6.2
 kernel.randomize_va_space:
@@ -109,7 +104,7 @@ kernel.randomize_va_space:
 tcp_wrappers:
   pkg.installed
 
-# Incomplete: need to generate hosts.allow
+# FIXME Incomplete: need to generate hosts.allow
 {% endif %}
 
 # 5.1
@@ -136,9 +131,9 @@ rsyslog_service:
     - mode: 600
     - replace: False
 
-{% if cis_benchmark.passwd_max_90 %}
-# 5.4.1.1
-login_defs_password_max:
+{% if cis_benchmark.login_defs_password %}
+# 5.4.1.1 - 5.4.1.3
+login_defs_password:
   file.blockreplace::
     - name: /etc/login.defs
     - append_if_not_found: True
@@ -146,6 +141,19 @@ login_defs_password_max:
     - marker_end: '#-- end salt managed login defs --'
     - content: |
         PASS_MAX_DAYS 90
+        PASS_MAX_DAYS 7
+        PASS_WARN_AGE 7
+{% endif %}
+
+# 5.4.1.4
+{% if cis_benchmark.inactive_lock %}
+useradd_inactive_lock:
+  file.line:
+    - name: /etc/default/useradd
+    - match: INACTIVE=-1
+    - content: |
+        INACTIVE=30
+    - mode: replace
 {% endif %}
 
 # 5.6
@@ -227,6 +235,7 @@ login_defs_password_max:
     - user: root
     - group: root
     - mode: 600
+    - replace: False
 
 # Omitted: 6.1.11
 
