@@ -159,7 +159,6 @@ login_defs_password_max:
         auth required pam_wheel.so use_uid
 {% endif %}
 
-
 # 6.1.4
 /etc/crontab:
   file.managed:
