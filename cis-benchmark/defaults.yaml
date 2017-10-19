@@ -47,6 +47,9 @@ cis_benchmark:
   # 5.4.1.1 Ensure password expiration is 90 days or less
   passwd_max_90: False
 
+  # 5.6 Ensure access to the su command is restricted
+  pam_su: True
+
   daemon_umask: '027'  # 3.1
 
   remove_pkgs:

@@ -148,6 +148,17 @@ login_defs_password_max:
         PASS_MAX_DAYS 90
 {% endif %}
 
+# 5.6
+{% if cis_benchmark.pam_su %}
+/etc/pam.d/su:
+  file.blockreplace:
+    - append_if_not_found: True
+    - marker_start: '#-- salt managed su zone --'
+    - marker_end: '#-- end salt managed su defs --'
+    - content: |
+        auth required pam_wheel.so use_uid
+{% endif %}
+
 # 6.1.4
 /etc/crontab:
   file.managed:
