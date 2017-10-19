@@ -134,7 +134,7 @@ rsyslog_service:
 {% if cis_benchmark.login_defs_password %}
 # 5.4.1.1 - 5.4.1.3
 login_defs_password:
-  file.blockreplace::
+  file.blockreplace:
     - name: /etc/login.defs
     - append_if_not_found: True
     - marker_start: '#-- salt managed login defs zone --'
