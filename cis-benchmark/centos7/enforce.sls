@@ -31,16 +31,15 @@
     - value: 0
 {% endfor %}
 
+# FIXME not idempotent
 # 1.1.1
 # Filesystem mounts disabled
 {% for filesystem in cis_benchmark.disable_filesystem_types %}
 no-{{ filesystem }}:
-  file.line:
+  file.managed:
     - name: /etc/modprobe.d/disable_{{ filesystem }}.conf
-    - content: "install {{ filesystem }} /bin/true\n"
-    - mode: insert
-    - location: start
-    - create: True
+    - contents: 
+      - "install {{ filesystem }} /bin/true\n"
     - user: root
     - group: root
     - file_mode: 640
@@ -137,13 +136,29 @@ rsyslog_service:
     - mode: 600
     - replace: False
 
+{% if cis_benchmark.passwd_max_90 %}
+# 5.4.1.1
+login_defs_password_max:
+  file.blockreplace::
+    - name: /etc/login.defs
+    - append_if_not_found: True
+    - marker_start: '#-- salt managed login defs zone --'
+    - marker_end: '#-- end salt managed login defs --'
+    - content: |
+        PASS_MAX_DAYS 90
+{% endif %}
+
 # 5.6
 {% if cis_benchmark.pam_su %}
 /etc/pam.d/su:
-  file.line:
-    - content: auth required pam_wheel.so use_uid
-    - mode: ensure
+  file.blockreplace:
+    - append_if_not_found: True
+    - marker_start: '#-- salt managed su zone --'
+    - marker_end: '#-- end salt managed su defs --'
+    - content: |
+        auth required pam_wheel.so use_uid
 {% endif %}
+
 
 # 6.1.4
 /etc/crontab:
