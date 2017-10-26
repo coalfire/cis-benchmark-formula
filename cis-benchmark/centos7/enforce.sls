@@ -123,6 +123,35 @@ rsyslog_service:
 # Omitted: 5.1.3, 5.1.4, 5.1.5
 {% endif %}
 
+# 5.1.8
+{% if cis_benchmark.at_deny_absent %}
+/etc/at.deny:
+  file.absent
+{% endif %}
+
+{% if cis_benchmark.at_allow %}
+/etc/at.allow:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - replace: False
+{% endif %}
+
+{% if cis_benchmark.cron_deny_absent %}
+/etc/cron.deny:
+  file.absent
+{% endif %}
+
+{% if cis_benchmark.cron_allow %}
+/etc/cron.allow:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - replace: False
+{% endif %}
+  
 # 5.2.1
 /etc/ssh/sshd_config:
   file.managed:
@@ -130,6 +159,87 @@ rsyslog_service:
     - group: root
     - mode: 600
     - replace: False
+
+# 5.3
+{% if cis_benchmark.password_creation_requirements %}
+/etc/security/pwquality.conf:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - contents: |
+        minlen=14
+        dcredit=-1
+        ucredit=-1
+        ocredit=-1
+        lcredit=-1
+{% endif %}
+
+{% if cis_benchmark.pam_password_files %}
+/etc/pam.d/password-auth-ac:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - contents: |
+        auth        required      pam_env.so
+        auth        sufficient    pam_unix.so nullok try_first_pass
+        auth        requisite     pam_succeed_if.so uid >= 1000 quiet_success
+        auth        required      pam_deny.so
+        
+        auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900
+        auth [success=1 default=bad] pam_unix.so
+        auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900
+        auth sufficient pam_faillock.so authsucc audit deny=5 unlock_time=900
+
+        account     required      pam_unix.so
+        account     sufficient    pam_localuser.so
+        account     sufficient    pam_succeed_if.so uid < 1000 quiet
+        account     required      pam_permit.so
+        
+        password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
+        password    sufficient    pam_unix.so remember=5 sha512 shadow nullok try_first_pass use_authtok
+        password    required      pam_deny.so
+        
+        session     optional      pam_keyinit.so revoke
+        session     required      pam_limits.so
+        -session     optional      pam_systemd.so
+        session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+        session     required      pam_unix.so
+
+/etc/pam.d/system-auth-ac:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 644
+    - contents: |
+        auth        required      pam_env.so
+        auth        sufficient    pam_unix.so nullok try_first_pass
+        auth        requisite     pam_succeed_if.so uid >= 1000 quiet_success
+        auth        required      pam_deny.so
+        
+        auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900
+        auth [success=1 default=bad] pam_unix.so
+        auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900
+        auth sufficient pam_faillock.so authsucc audit deny=5 unlock_time=900
+
+        account     required      pam_unix.so
+        account     sufficient    pam_localuser.so
+        account     sufficient    pam_succeed_if.so uid < 1000 quiet
+        account     required      pam_permit.so
+        
+        password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
+        password    sufficient    pam_unix.so remember=5 sha512 shadow nullok try_first_pass use_authtok
+        password    required      pam_deny.so
+        
+        session     optional      pam_keyinit.so revoke
+        session     required      pam_limits.so
+        -session     optional      pam_systemd.so
+        session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+        session     required      pam_unix.so
+
+{% endif %}
+
 
 {% if cis_benchmark.login_defs_password %}
 # 5.4.1.1 - 5.4.1.3
