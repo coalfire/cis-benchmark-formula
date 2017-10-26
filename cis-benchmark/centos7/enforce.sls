@@ -125,8 +125,9 @@ rsyslog_service:
 
 # 5.1.8
 {% if cis_benchmark.at_deny_absent %}
-/etc/at.deny:
-  file.absent
+at-deny-absent:
+  file.absent:
+    - name: /etc/at.deny:
 {% endif %}
 
 {% if cis_benchmark.at_allow %}
@@ -139,8 +140,9 @@ rsyslog_service:
 {% endif %}
 
 {% if cis_benchmark.cron_deny_absent %}
-/etc/cron.deny:
+cron-deny-absent:
   file.absent
+    - name: /etc/cron.deny:
 {% endif %}
 
 {% if cis_benchmark.cron_allow %}
