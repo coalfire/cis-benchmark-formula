@@ -338,17 +338,3 @@ useradd_inactive_lock:
     - group: root
     - mode: 700
 
-# 6.1.10
-/etc/at.deny:
-  file.absent
-
-/etc/at.allow:
-  file.managed:
-    - user: root
-    - group: root
-    - mode: 600
-    - replace: False
-
-# Omitted: 6.1.11
-
-
