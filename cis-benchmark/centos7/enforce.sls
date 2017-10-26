@@ -123,6 +123,35 @@ rsyslog_service:
 # Omitted: 5.1.3, 5.1.4, 5.1.5
 {% endif %}
 
+# 5.1.8
+{% if cis_benchmark.at_deny_absent %}
+/etc/at.deny:
+  file.absent
+{% endif %}
+
+{% if cis_benchmark.at_allow %}
+/etc/at.allow:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - replace: False
+{% endif %}
+
+{% if cis_benchmark.cron_deny_absent %}
+/etc/cron.deny:
+  file.absent
+{% endif %}
+
+{% if cis_benchmark.cron_allow %}
+/etc/cron.allow:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - replace: False
+{% endif %}
+  
 # 5.2.1
 /etc/ssh/sshd_config:
   file.managed:
