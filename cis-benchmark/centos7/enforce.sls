@@ -253,7 +253,7 @@ login_defs_password:
     - marker_end: '#-- end salt managed login defs --'
     - content: |
         PASS_MAX_DAYS 90
-        PASS_MAX_DAYS 7
+        PASS_MIN_DAYS 7
         PASS_WARN_AGE 7
 {% endif %}
 
