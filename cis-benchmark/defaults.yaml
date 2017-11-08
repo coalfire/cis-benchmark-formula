@@ -38,6 +38,9 @@ cis_benchmark:
   # 1.4.2 - Enable SELinux if true
   selinux: False
 
+  # 1.5.1 Ensure core dumps are restricted
+  core_dump_hard_limit: True
+
   # 4.5 Install and configure TCPWrappers if true
   tcpwrappers: True
 

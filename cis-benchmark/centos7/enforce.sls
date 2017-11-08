@@ -86,6 +86,21 @@ enforcing:
   selinux.mode
 {% endif %}
 
+# 1.5.1
+{% if cis_benchmark.core_dump_hard_limit %}
+/etc/security/limits.d/core_dump_hard_limit:
+  file.managed:
+    - user: root
+    - group: root
+    - mode: 600
+    - contents: |
+        * hard core 0
+
+fs.suid_dumpable:
+  sysctl.present:
+    - value: 0
+{% endif %}
+
 # 1.5.1 - 1.5.2
 /boot/grub2/grub.cfg:
   file.managed:
