@@ -50,7 +50,7 @@ tmpfs-mount:
     - name: /dev/shm
     - device: tmpfs
     - fstype: tmpfs
-    - opts; rw,nosuid,nodev,noexec,seclabel,
+    - opts: rw,nosuid,nodev,noexec,seclabel
  {% endif %}
 
 # 1.2.2
