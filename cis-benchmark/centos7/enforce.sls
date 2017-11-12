@@ -95,10 +95,6 @@ enforcing:
     - mode: 600
     - contents: |
         * hard core 0
-
-fs.suid_dumpable:
-  sysctl.present:
-    - value: 0
 {% endif %}
 
 # 1.5.1 - 1.5.2

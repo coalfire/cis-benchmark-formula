@@ -166,7 +166,7 @@ cis_benchmark:
     - net.ipv6.conf.all.disable_ipv6
   
   sysctl_disable:
-    # 1.6.1
+    # 1.5.1
     - fs.suid_dumpable
     # 4.1.1
     - net.ipv4.ip_forward
