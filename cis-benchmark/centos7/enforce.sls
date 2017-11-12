@@ -43,6 +43,16 @@ no-{{ filesystem }}:
     - file_mode: 640
 {% endfor %}
 
+# 1.1.15 - 1.1.17
+{% if cis_benchmark.shm_mount_options %}
+tmpfs-mount:
+  mount.mounted:
+    - name: /dev/shm
+    - device: tmpfs
+    - fstype: tmpfs
+    - opts; rw,nosuid,nodev,noexec,seclabel,
+ {% endif %}
+
 # 1.2.2
 {% if cis_benchmark.gpgcheck %}
 /etc/yum.conf:
