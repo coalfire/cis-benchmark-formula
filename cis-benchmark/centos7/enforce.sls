@@ -53,6 +53,15 @@ tmpfs-mount:
     - opts: rw,nosuid,nodev,noexec,seclabel
  {% endif %}
 
+# 1.7.1.5
+etc-issue-permissions:
+  file.managed:
+    - name: /etc/issue
+    - user: root
+    - group: root
+    - mode: 644
+    - replace: False
+
 # 1.2.2
 {% if cis_benchmark.gpgcheck %}
 /etc/yum.conf:
