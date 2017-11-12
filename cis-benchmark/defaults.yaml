@@ -23,6 +23,9 @@ cis_benchmark:
     # 1.1.1.8 
     - vfat
 
+  # 1.1.15 - 1.1.17 Enrsure nodev/nosuid/noexec option set on /dev/shm partition
+  ssh_mount_options: True
+
   # 1.2.1
   gpg_key_url: http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-7
   # 1.2.2
