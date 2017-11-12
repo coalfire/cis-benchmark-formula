@@ -88,7 +88,7 @@ enforcing:
 
 # 1.5.1
 {% if cis_benchmark.core_dump_hard_limit %}
-/etc/security/limits.d/core_dump_hard_limit:
+/etc/security/limits.d/15-core_dump_hard_limit:
   file.managed:
     - user: root
     - group: root
