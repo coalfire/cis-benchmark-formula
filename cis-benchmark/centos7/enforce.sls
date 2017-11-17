@@ -151,6 +151,13 @@ audit-rules-file:
     - source: salt://cis-benchmark/centos7/files/64bit-audit.rules
 {% endif %}
 
+# 4.2.4
+{% if cis_benchmark.enforce_logfile_permissions %}
+enforce-logfile-permissions:
+  cmd.run:
+    - name: find /var/log -type f -exec chmod g-wx,o-rwx {} +
+{% endif %}
+
 # 4.5.1
 {% if cis_benchmark.tcpwrappers %}
 tcp_wrappers:

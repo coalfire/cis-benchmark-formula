@@ -50,6 +50,9 @@ cis_benchmark:
   # 4.1.4 - 4.1.18 Configure System Accounting - audit.rules
   audit_rules: True
 
+  # 4.2.4 Ensure permissions on all logfiles are configured
+  enforce_logfile_permissions: True
+
   # 4.5 Install and configure TCPWrappers if true
   tcpwrappers: True
 
