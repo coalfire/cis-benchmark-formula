@@ -150,11 +150,17 @@ audit-rules-file:
     - mode: 640
     - source: salt://cis-benchmark/centos7/files/64bit-audit.rules
 
+audit-rules-privileged-commands:
+  cmd.run:
+    - name: find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" }' >/etc/audit/rules.d/70-priviledged-commands.rule
+    - creates: /etc/audit/rules.d/70-priviledged-commands.rule
+
 audit_rules_load:
   cmd.run:
     - name: augenrules --load
     - onchanges:
       - file: audit-rules-file
+      - cmd: audit-rules-privileged-commands
 {% endif %}
 
 # 4.2.4

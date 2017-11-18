@@ -91,6 +91,8 @@
 -a always,exit -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
 -a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
 
+-a always,exit -F path=/usr/sbin/postdrop -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/postqueue -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
 # CIS 4.1.13 Ensure successful file system mounts are collected
 # 64 bit
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
