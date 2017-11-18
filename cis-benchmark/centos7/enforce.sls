@@ -152,8 +152,8 @@ audit-rules-file:
 
 audit-rules-privileged-commands:
   cmd.run:
-    - name: find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" }' >/etc/audit/rules.d/70-priviledged-commands.rule
-    - creates: /etc/audit/rules.d/70-priviledged-commands.rule
+    - name: find / -xdev \( -perm -4000 -o -perm -2000 \) -type f | awk '{print "-a always,exit -F path=" $1 " -F perm=x -F auid>=1000 -F auid!=4294967295 -k p
+    - creates: /etc/audit/rules.d/70-privileged-commands.rules
 
 audit_rules_load:
   cmd.run:
