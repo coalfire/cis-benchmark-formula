@@ -153,7 +153,7 @@ audit-rules-file:
 audit_rules_load:
   cmd.run:
     - name: augenrules --load
-    - onchanges_in:
+    - onchanges:
       - file: audit-rules-file
 {% endif %}
 
