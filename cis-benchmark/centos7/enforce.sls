@@ -141,7 +141,7 @@ auditd-config-file:
 {% endif %}
 
 # 4.1.4 - 4.1.18
-{% if cis_benchmark.auditd_rules %}
+{% if cis_benchmark.audit_rules %}
 audit-rules-file:
   file.managed:
     - name: /etc/audit/rules.d/audit.rules
