@@ -149,6 +149,12 @@ audit-rules-file:
     - group: root
     - mode: 640
     - source: salt://cis-benchmark/centos7/files/64bit-audit.rules
+
+audit_rules_load:
+  cmd.run:
+    - name: augenrules --load
+    - onchanges_in:
+      - file: audit-rules-file
 {% endif %}
 
 # 4.2.4
