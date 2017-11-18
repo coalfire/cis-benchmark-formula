@@ -129,6 +129,35 @@ kernel.randomize_va_space:
   sysctl.present:
     - value: 2
 
+# 4.1.1.1 - 4.1.1.3
+{% if cis_benchmark.auditd_conf %}
+auditd-config-file:
+  file.managed:
+    - name: /etc/audit/auditd.conf
+    - user: root
+    - group: root
+    - mode: 640
+    - source: salt://cis-benchmark/centos7/files/auditd.conf
+{% endif %}
+
+# 4.1.4 - 4.1.18
+{% if cis_benchmark.auditd_rules %}
+audit-rules-file:
+  file.managed:
+    - name: /etc/audit/rules.d/audit.rules
+    - user: root
+    - group: root
+    - mode: 640
+    - source: salt://cis-benchmark/centos7/files/64bit-audit.rules
+{% endif %}
+
+# 4.2.4
+{% if cis_benchmark.enforce_logfile_permissions %}
+enforce-logfile-permissions:
+  cmd.run:
+    - name: find /var/log -type f -exec chmod g-wx,o-rwx {} +
+{% endif %}
+
 # 4.5.1
 {% if cis_benchmark.tcpwrappers %}
 tcp_wrappers:
