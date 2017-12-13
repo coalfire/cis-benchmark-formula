@@ -140,6 +140,23 @@ auditd-config-file:
     - source: salt://cis-benchmark/centos7/files/auditd.conf
 {% endif %}
 
+# 4.1.3
+{% if cis_benchmark.auditd_grub %}
+boot-grub2-grub-audit:
+  file.blockreplace:
+    - name: /etc/default/grub
+    - append_if_not_found: True
+    - marker_start: '#-- salt managed audit zone --'
+    - marker_end: '#-- end salt managed audit zone --'
+    - content: |
+        GRUB_CMDLINE_LINUX="audit=1"
+  cmd:
+    - wait
+    - name: grub2-mkconfig > /boot/grub2/grub.cfg
+    - watch:
+      - file: boot-grub2-grub-audit
+{% endif %}
+
 # 4.1.4 - 4.1.18
 {% if cis_benchmark.audit_rules %}
 audit-rules-file:
