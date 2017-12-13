@@ -47,6 +47,9 @@ cis_benchmark:
   # 4.1.1.1 - 4.1.1.3 Configure Data Retention - auditd.conf
   auditd_conf: True
 
+  # 4.1.3 Ensure auditing for processes that start prior to auditd is enabled
+  auditd_grub: True
+
   # 4.1.4 - 4.1.18 Configure System Accounting - audit.rules
   audit_rules: True
 
