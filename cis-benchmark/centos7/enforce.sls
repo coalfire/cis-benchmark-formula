@@ -180,6 +180,18 @@ audit_rules_load:
       - cmd: audit-rules-privileged-commands
 {% endif %}
 
+# 4.2.1.3
+{% if cis_benchmark.rsyslog_default_file_permissions %}
+rsyslog_config_file_permissions:
+  file.blockreplace:
+    - name: /etc/rsyslog.conf
+    - append_if_not_found: True
+    - marker_start: '#-- salt managed file permissions zone --'
+    - marker_end: '#-- end salt managed file permissions zone --'
+    - content: |
+        $FileCreateMode 0640
+{% endif %}
+
 # 4.2.4
 {% if cis_benchmark.enforce_logfile_permissions %}
 enforce-logfile-permissions:
