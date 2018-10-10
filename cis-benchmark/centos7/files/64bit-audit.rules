@@ -30,14 +30,15 @@
 # CIS 4.1.6 Ensure events that modify the system's network environment are collected
 # 64 bit
 -a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale
--a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale
 -w /etc/issue -p wa -k system-locale
 -w /etc/issue.net -p wa -k system-locale
 -w /etc/hosts -p wa -k system-locale
 -w /etc/sysconfig/network -p wa -k system-locale
+-w /etc/sysconfig/network-scripts/ -p wa -k system-locale
 
 # CIS 4.1.7 Ensure events that modify the system's Mandatory Access Controls are collected
 -w /etc/selinux/ -p wa -k MAC-policy
+-w /usr/share/selinux/ -p wa -k MAC-policy 
 
 # CIS 4.1.8 Ensure login and logout events are collected
 -w /var/log/lastlog -p wa -k logins
@@ -45,8 +46,8 @@
 
 # CIS 4.1.9 Ensure session initiation information is collected
 -w /var/run/utmp -p wa -k session
--w /var/log/wtmp -p wa -k session
--w /var/log/btmp -p wa -k session
+-w /var/log/wtmp -p wa -k logins
+-w /var/log/btmp -p wa -k logins 
 
 # CIS 4.1.10 Ensure discretionary access control permission modification events are collected
 # 64 bit
@@ -67,21 +68,22 @@
 # CIS 4.1.12 Ensure use of privileged commands is collected
 # This is done dynamically
 
--a always,exit -F path=/usr/sbin/postdrop -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
--a always,exit -F path=/usr/sbin/postqueue -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+#-a always,exit -F path=/usr/sbin/postdrop -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+#-a always,exit -F path=/usr/sbin/postqueue -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+
 # CIS 4.1.13 Ensure successful file system mounts are collected
 # 64 bit
 -a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
--a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts
+-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts 
 
 # CIS 4.1.14 Ensure file deletion events by users are collected
 # 64 bit
 -a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
--a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete 
 
 # CIS 4.1.15 Ensure changes to system administration scope (sudoers) is collected
 -w /etc/sudoers -p wa -k scope
--w /etc/sudoers.d -p wa -k scope
+-w /etc/sudoers.d/ -p wa -k scope 
 
 # CIS 4.1.16 Ensure system administrator actions (sudolog) are collected
 -w /var/log/sudo.log -p wa -k actions
