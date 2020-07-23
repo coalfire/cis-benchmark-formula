@@ -40,7 +40,7 @@ no-{{ filesystem }}:
       - "install {{ filesystem }} /bin/true\n"
     - user: root
     - group: root
-    - file_mode: 640
+    - mode: 640
 {% endfor %}
 
 # 1.1.15 - 1.1.17
